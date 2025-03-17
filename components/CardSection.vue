@@ -9,6 +9,19 @@ const ShowAddModal = ref(false);
 const changeModalVisibility = () => {
 	ShowAddModal.value = !ShowAddModal.value;
 };
+
+const checkedTodos = ref([]);
+
+const handleCheckboxChange = (todo, isChecked) => {
+	if (isChecked) {
+		// Add todo to checkedTodos if checked
+		checkedTodos.value.push(todo);
+		console.log(checkedTodos.value);
+	} else {
+		// Remove todo from checkedTodos if unchecked
+		checkedTodos.value = checkedTodos.value.filter((t) => t.id !== todo.id);
+	}
+};
 </script>
 
 <template>
@@ -35,6 +48,7 @@ const changeModalVisibility = () => {
 			:priority="todo.priority"
 			:created_at="todo.created_at"
 			:isCompleted="todo.is_completed"
+			@checkbox-change="handleCheckboxChange"
 		/>
 	</div>
 </template>

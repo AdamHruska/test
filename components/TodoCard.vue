@@ -1,27 +1,22 @@
 <script setup>
 import { Icon } from "@iconify/vue";
 const props = defineProps({
-	title: {
-		type: String,
-		required: true,
-	},
-	body: {
-		type: String,
-		required: true,
-	},
-	isCompleted: {
-		type: Boolean,
-		required: true,
-	},
-	priority: {
-		type: String,
-		required: true,
-	},
-	created_at: {
-		type: String,
-		required: true,
-	},
+	title: String,
+	body: String,
+	priority: String,
+	created_at: String,
+	isCompleted: Boolean,
 });
+
+const emit = defineEmits(["checkbox-change"]);
+
+const isChecked = ref(false);
+
+const handleCheckboxChange = (event) => {
+	isChecked.value = event.target.checked;
+	emit("checkbox-change", props, isChecked.value);
+	console.log("Checkbox changed");
+};
 </script>
 
 <template>
@@ -29,6 +24,8 @@ const props = defineProps({
 		<div class="flex items-center gap-3">
 			<input
 				type="checkbox"
+				:checked="isChecked"
+				@change="handleCheckboxChange"
 				class="form-checkbox h-4 w-4 text-blue-600 rounded cursor-pointer"
 			/>
 			<h3 class="text-lg font-semibold truncate">{{ title }}</h3>
