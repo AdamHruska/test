@@ -1,7 +1,6 @@
 <template>
 	<div class="w-full max-w-md mx-auto mt-4">
 		<div class="flex items-center gap-2">
-			<!-- Input Field with Icon -->
 			<div class="relative flex-1">
 				<div
 					class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
@@ -28,7 +27,6 @@
 				/>
 			</div>
 
-			<!-- Search Button -->
 			<button
 				class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
 			>
