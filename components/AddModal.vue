@@ -36,7 +36,7 @@ const handleSubmit = async () => {
 
 <template>
 	<div
-		class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4"
+		class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
 	>
 		<div class="bg-white rounded-lg shadow-lg w-full max-w-md">
 			<div class="p-4 flex justify-between items-center px-8">
@@ -58,6 +58,7 @@ const handleSubmit = async () => {
 							v-model="form.title"
 							type="text"
 							id="title"
+							maxlength="255"
 							placeholder="Enter title"
 							class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
 							required

@@ -4,8 +4,8 @@ const todoStore = useTodoStore();
 
 const todos = computed(() => todoStore.todos.data);
 const paginationLinks = computed(() => todoStore.todos.links || []);
-const currentPage = computed(() => todoStore.todos.current_page);
-const lastPage = computed(() => todoStore.todos.last_page);
+const currentPage = computed(() => todoStore.todos.current_page || 1);
+const lastPage = computed(() => todoStore.todos.last_page || 1);
 
 onMounted(() => {
 	todoStore.fetchTodos();
@@ -22,7 +22,6 @@ const checkedTodos = ref([]);
 const handleCheckboxChange = (todo, isChecked) => {
 	if (isChecked) {
 		checkedTodos.value.push(todo);
-		console.log(checkedTodos.value);
 	} else {
 		checkedTodos.value = checkedTodos.value.filter((t) => t.id !== todo.id);
 	}
@@ -57,7 +56,6 @@ const handlePageChange = (page) => {
 			</button>
 			<button
 				@click="handleDeleteSelected"
-				:disabled="checkedTodos.length === 0"
 				class="bg-red-500 px-5 py-2 font-semibold text-lg rounded-lg text-white hover:bg-red-600"
 				:class="{ 'opacity-50 cursor-not-allowed': checkedTodos.length === 0 }"
 			>
@@ -80,7 +78,6 @@ const handlePageChange = (page) => {
 				:created_at="todo.created_at"
 				:isCompleted="todo.is_completed === 1"
 				@checkbox-change="handleCheckboxChange"
-				@mark-as-done="handleMarkAsDone(todo)"
 			/>
 
 			<Pagination

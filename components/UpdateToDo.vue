@@ -13,7 +13,7 @@ const props = defineProps({
 	isCompleted: Boolean,
 });
 
-const emit = defineEmits(["closeUpdate"]);
+const emit = defineEmits(["closeUpdate", "showDeleteConfirm"]);
 
 const closeUpdateModal = () => {
 	emit("closeUpdate");
@@ -41,18 +41,16 @@ const handleSubmit = async () => {
 };
 
 const handleDelete = async () => {
-	try {
-		await todoStore.deleteTodo(props.id);
-		closeUpdateModal();
-	} catch (error) {
-		console.error("Failed to delete todo:", error);
-	}
+	closeUpdateModal();
+
+	emit("showDeleteConfirm", props.id);
 };
 </script>
 
 <template>
+	<DeleteConfirmComponent v-if="deleteConfirmState" />
 	<div
-		class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4"
+		class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
 	>
 		<div class="bg-white rounded-lg shadow-lg w-full max-w-md">
 			<div class="p-4 flex justify-between items-center px-8">
@@ -76,6 +74,7 @@ const handleDelete = async () => {
 							id="title"
 							placeholder="Enter title"
 							class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+							maxlength="255"
 							required
 						/>
 					</div>
@@ -89,7 +88,7 @@ const handleDelete = async () => {
 							id="body"
 							placeholder="Enter description"
 							rows="3"
-							class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+							class="mt-1 block w-full px-3 py-2 border h-[300px] sm:h-[150px] border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
 						></textarea>
 					</div>
 
@@ -119,6 +118,7 @@ const handleDelete = async () => {
 						>
 							Delete
 						</button>
+
 						<button
 							type="submit"
 							class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-500"

@@ -88,7 +88,10 @@ export const useTodoStore = defineStore("todo", {
 		async deleteTodos(ids) {
 			try {
 				const { $api } = useNuxtApp();
-				await $api.delete(`todo-records`, { data: { ids } });
+
+				for (let i = 0; i < ids.length; i++) {
+					await $api.delete(`todo-records/${ids[i]}`);
+				}
 
 				await this.fetchTodos(this.todos.current_page);
 			} catch (err) {
@@ -99,16 +102,37 @@ export const useTodoStore = defineStore("todo", {
 
 		async markAsCompleted(id) {
 			try {
-				const { $api } = useNuxtApp();
-				const response = await $api.put(`todo-records/${id}/complete`);
-				if (response.status === 201) {
-					toast.success("Task marked as completed");
-				} else {
-					toast.error("Failed to mark as completed");
+				const todoToUpdate = this.todos.data.find((todo) => todo.id === id);
+
+				if (!todoToUpdate) {
+					this.error = "Todo not found";
+					return;
 				}
+				let updatedTodo;
+				if (todoToUpdate.is_completed === 1) {
+					updatedTodo = {
+						...todoToUpdate,
+						is_completed: 0,
+					};
+				} else {
+					updatedTodo = {
+						...todoToUpdate,
+						is_completed: 1,
+					};
+				}
+
+				const { $api } = useNuxtApp();
+				const response = await $api.put(`todo-records/${id}`, updatedTodo);
+
+				if (response.status === 200) {
+					toast.success("Activity completed successfully");
+				} else {
+					toast.error("Failed to complete activity");
+				}
+
 				await this.fetchTodos(this.todos.current_page);
 			} catch (err) {
-				this.error = "Failed to mark todo as completed";
+				this.error = "Failed to complete activity";
 				console.error(err);
 			}
 		},
